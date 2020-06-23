@@ -2,6 +2,22 @@ import React, { useState } from 'react';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 import drawerNavigator from './routes/drawer';
+import * as firebase from 'firebase';
+
+// Your web app's Firebase configuration
+var firebaseConfig = {
+    apiKey: 'example',
+    authDomain: 'example',
+    databaseURL: 'example',
+    projectId: 'example',
+    storageBucket: 'example',
+    messagingSenderId: 'example',
+    appId: 'example',
+};
+// Initialize Firebase
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 
 const getFonts = () =>
     Font.loadAsync({

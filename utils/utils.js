@@ -21,11 +21,20 @@ export function getDistance(prevCordinate, newCordinate) {
     return d;
 }
 
-// Convert milliseconds to minutes and kilometer
-export function msToMinutesAndSeconds(millis) {
-    let minutes = Math.floor(millis / 60000);
-    let seconds = ((millis % 60000) / 1000).toFixed(0);
-    return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+export function msToMin(millis) {
+    return millis / 60000;
+}
+
+// Convert milliseconds to minutes and seconds
+export function minToMinSec(decimalMinutes) {
+    let minutes = Math.floor(decimalMinutes);
+    let seconds = ((decimalMinutes * 60) % 60).toFixed(0);
+    seconds = (seconds < 10 ? '0' : '') + seconds;
+
+    return {
+        minutes: minutes,
+        seconds: seconds,
+    };
 }
 
 // Convert meter per seconds to minutes per kilometer
@@ -34,16 +43,43 @@ export function mpsToMinutesPerKm(mps) {
     let minutes = Math.floor(secPerKilometer / 60);
     let seconds = secPerKilometer % 60;
 
-    return (
-        (minutes < 10 ? '0' : '') +
-        minutes.toFixed(0) +
-        ':' +
-        (seconds < 10 ? '0' : '') +
-        seconds.toFixed(0)
-    );
+    // return (
+    //     (minutes < 10 ? '0' : '') +
+    //     minutes.toFixed(0) +
+    //     ':' +
+    //     (seconds < 10 ? '0' : '') +
+    //     seconds.toFixed(0)
+    // );
+
+    minutes = (minutes < 10 ? '0' : '') + minutes.toFixed(0);
+    seconds = (seconds < 10 ? '0' : '') + seconds.toFixed(0);
+
+    return {
+        minutes: minutes,
+        seconds: seconds,
+    };
+}
+
+// Distance in Meter
+// Time in Minutes
+export function avgTempo(distance, time) {
+    let kilometers = distance / 1000;
+    // console.log(kilometers);
+
+    let AVGminPerKm = time / kilometers;
+
+    let minutes = Math.floor(AVGminPerKm);
+    let seconds = ((AVGminPerKm * 60) % 60).toFixed(0);
+    seconds = (seconds < 10 ? '0' : '') + seconds;
+
+    return {
+        minutes: minutes,
+        seconds: seconds,
+    };
 }
 
 // Return string of meter to km prinified
+// Distance in Meter
 export function meterToKilometer(meter) {
     let kilometers = meter / 1000;
     let completeKilometer = Math.floor(kilometers);
@@ -62,7 +98,9 @@ export function meterToKilometer(meter) {
 
 export default {
     getDistance,
-    msToMinutesAndSeconds,
+    msToMin,
+    minToMinSec,
     mpsToMinutesPerKm,
+    avgTempo,
     meterToKilometer,
 };

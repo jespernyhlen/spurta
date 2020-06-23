@@ -6,17 +6,19 @@ import * as Permissions from 'expo-permissions';
 import { globalStyles, images } from '../styles/global';
 import {
     getDistance,
-    msToMinutesAndSeconds,
+    avgTempo,
+    msToMin,
+    minToMinSec,
     mpsToMinutesPerKm,
     meterToKilometer,
 } from '../utils/utils';
-
-import FlatButton from '../shared/button';
+import * as firebase from 'firebase';
+import { FlatButton } from '../shared/button';
 
 export default function Activity({ route, navigation }) {
     const [errorMsg, setErrorMsg] = useState(null);
     const [startTime, setStartTime] = useState(null);
-    const [distance, setDistance] = useState(0);
+    const [distance, setDistance] = useState(1000);
 
     const [activityInfo, setActivityInfo] = useState({
         speed: null,
@@ -32,10 +34,7 @@ export default function Activity({ route, navigation }) {
         let position = await Location.getCurrentPositionAsync({
             accuracy: 5,
         });
-        console.log(activityInfo.time);
         console.log('------------------');
-
-        // console.log(position.timestamp);
 
         return {
             speed: position.coords.speed,
@@ -102,17 +101,84 @@ export default function Activity({ route, navigation }) {
         }, [activityInfo])
     );
 
+    let activityTime = '--||--';
+    let activitySpeed = '--||--';
+    let activityAVGSpeed = '--||--';
+
+    if (startTime && activityInfo.time) {
+        let timeInfo = minToMinSec(
+            msToMin(activityInfo.time) - msToMin(startTime)
+        );
+
+        activityTime = timeInfo.minutes + ':' + timeInfo.seconds;
+    }
+
+    if (activityInfo.speed > 0.2) {
+        let speedInfo = mpsToMinutesPerKm(activityInfo.speed);
+
+        activitySpeed =
+            speedInfo.minutes < 60
+                ? speedInfo.minutes + ':' + speedInfo.seconds
+                : '--||--';
+    }
+
+    if (distance > 1) {
+        let AVGTempo = avgTempo(
+            distance,
+            msToMin(activityInfo.time) - msToMin(startTime)
+        );
+
+        activityAVGSpeed = AVGTempo.minutes + ':' + AVGTempo.seconds;
+    }
+
+    const handlePress = () => {
+        let userID = 1;
+        let activityID = 1;
+
+        let name = 'userID';
+
+        let activityData = {
+            day: '2020-04-31',
+            time: activityTime,
+            speed: activityAVGSpeed,
+            distance: distance,
+        };
+
+        let newActivityKey = firebase
+            .database()
+            .ref()
+            .child('activities')
+            .push().key;
+
+        var updates = {};
+        updates[
+            '/activities/' + userID + '/activities/' + newActivityKey
+        ] = activityData;
+
+        firebase
+            .database()
+            .ref()
+            .update(updates)
+            .then((error) => {
+                if (error) {
+                    // The write failed...
+                    console.log('Failed to save results to database');
+                } else {
+                    // Data saved successfully!
+                    console.log('Successfully saved to database');
+                }
+            });
+
+        console.log(distance);
+
+        console.log(meterToKilometer(100));
+    };
+
     return (
         <View style={globalStyles.fullContainer}>
             <View style={styles.container}>
                 <View style={styles.content}>
-                    <Text style={styles.time}>
-                        {startTime && activityInfo.time
-                            ? msToMinutesAndSeconds(
-                                  activityInfo.time - startTime
-                              )
-                            : '--||--'}
-                    </Text>
+                    <Text style={styles.time}>{activityTime}</Text>
                     <Text style={styles.descText}>tid</Text>
                 </View>
                 <View style={styles.contentHighligt}>
@@ -131,15 +197,11 @@ export default function Activity({ route, navigation }) {
                 </View>
                 <View style={styles.contentRow}>
                     <View style={styles.content}>
-                        <Text style={styles.time}>
-                            {activityInfo.speed > 0.2
-                                ? mpsToMinutesPerKm(activityInfo.speed)
-                                : '--||--'}
-                        </Text>
+                        <Text style={styles.time}>{activitySpeed}</Text>
                         <Text style={styles.descText}>aktuellt tempo</Text>
                     </View>
                     <View style={styles.content}>
-                        <Text style={styles.time}>8:21</Text>
+                        <Text style={styles.time}>{activityAVGSpeed}</Text>
                         <Text style={styles.descText}>medel tempo</Text>
                     </View>
                 </View>
@@ -148,9 +210,7 @@ export default function Activity({ route, navigation }) {
             <FlatButton
                 text='stoppa aktivitet'
                 color='orange'
-                onPress={() => {
-                    navigation.navigate('Home');
-                }}
+                onPress={() => handlePress()}
             />
         </View>
     );
@@ -205,7 +265,7 @@ const styles = StyleSheet.create({
 // import { globalStyles, images } from '../styles/global';
 // import {
 //     getDistance,
-//     msToMinutesAndSeconds,
+//     minToMinSec,
 //     mpsToMinutesPerKm,
 //     meterToKilometer,
 // } from '../utils/utils';
@@ -305,7 +365,7 @@ const styles = StyleSheet.create({
 //                 <View style={styles.content}>
 //                     <Text style={styles.time}>
 //                         {startTime && activityInfo.time
-//                             ? msToMinutesAndSeconds(
+//                             ? minToMinSec(
 //                                   activityInfo.time - startTime
 //                               )
 //                             : '--||--'}

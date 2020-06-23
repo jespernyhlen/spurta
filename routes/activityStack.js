@@ -1,17 +1,20 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import Home from '../screens/home';
+import ActivityHome from '../screens/activityHome';
 import Activity from '../screens/activity';
 import Header from '../shared/header';
 
 const Stack = createStackNavigator();
 
-export default function homeNavigator({ navigation }) {
+export default function activityNavigator({ navigation }) {
     return (
-        <Stack.Navigator initialRouteName='Home' screenOptions={screenOptions}>
+        <Stack.Navigator
+            initialRouteName='ActvityHome'
+            screenOptions={screenOptions}
+        >
             <Stack.Screen
-                name='Home'
-                component={Home}
+                name='ActvityHome'
+                component={ActivityHome}
                 options={{
                     headerTitle: () => (
                         <Header navigation={navigation} title='Springtur' />

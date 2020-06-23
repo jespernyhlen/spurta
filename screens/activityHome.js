@@ -15,9 +15,9 @@ import * as Permissions from 'expo-permissions';
 import * as TaskManager from 'expo-task-manager';
 import MapView from 'react-native-maps';
 import { globalStyles } from '../styles/global';
-import FlatButton from '../shared/button';
+import { FlatButton } from '../shared/button';
 
-export default function Home({ navigation }) {
+export default function activityHome({ navigation }) {
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
 
