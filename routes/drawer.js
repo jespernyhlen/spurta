@@ -5,7 +5,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import activitiesNavigator from './activitiesStack';
 import activityNavigator from './activityStack';
 import loginNavigator from './loginStack';
-import signupNavigator from './signupStack';
+import logoutNavigator from './logoutStack';
 // import mainNavigator from './mainStack';
 // import Signup from '../components/Signup';
 
@@ -31,6 +31,11 @@ export default function drawerNavigator({ isLoggedIn }) {
                     name='Aktiviteter'
                     component={activitiesNavigator}
                     options={drawerIcon('trending-up')}
+                />
+                <Drawer.Screen
+                    name='Logga ut'
+                    component={logoutNavigator}
+                    options={drawerIcon('exit-to-app')}
                 />
             </Drawer.Navigator>
         </NavigationContainer>
@@ -75,7 +80,7 @@ const drawerIcon = (iconName) => {
             <MaterialIcons
                 style={{ padding: 0, marginRight: -10 }}
                 name={iconName}
-                size={20}
+                size={24}
                 color='white'
             />
         ),

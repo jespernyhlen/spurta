@@ -84,6 +84,7 @@ export default function Login({ navigation }) {
                             />
 
                             <TextInput
+                                keyboardShouldPersistTaps='handled'
                                 style={styles.inputStyle}
                                 placeholder='E-post'
                                 value={email}

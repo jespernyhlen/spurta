@@ -15,6 +15,7 @@ var firebaseConfig = {
     messagingSenderId: 'example',
     appId: 'example',
 };
+
 // Initialize Firebase
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
@@ -114,8 +115,8 @@ export default function App() {
     );
 
     if (fontLoaded) {
-        let userLoggedIn = state.userToken == null ? true : false;
-        // let userLoggedIn = state.userToken == null ? false : true;
+        // let userLoggedIn = state.userToken == null ? true : false;
+        let userLoggedIn = state.userToken == null ? false : true;
 
         return (
             <AuthContext.Provider value={authContext}>

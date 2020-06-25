@@ -1,19 +1,23 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Header from '../shared/header';
-import Main from '../components/Main';
+import Main from '../components/Logout';
+import { HomeButton, HomeButtonOpacity } from '../shared/button';
 
 const Stack = createStackNavigator();
 
-export default function mainNavigator({ navigation }) {
+export default function logoutNavigator({ navigation }) {
     return (
-        <Stack.Navigator initialRouteName='Main' screenOptions={screenOptions}>
+        <Stack.Navigator
+            initialRouteName='Logout'
+            screenOptions={screenOptions}
+        >
             <Stack.Screen
-                name='Main'
+                name='Logout'
                 component={Main}
                 options={{
                     headerTitle: () => (
-                        <Header navigation={navigation} title='Main' />
+                        <Header navigation={navigation} title='Logga ut' />
                     ),
                 }}
             />
@@ -23,7 +27,7 @@ export default function mainNavigator({ navigation }) {
 
 const screenOptions = {
     headerStyle: {
-        backgroundColor: '#111',
+        backgroundColor: '#222',
     },
     headerTintColor: '#fff',
     headerTitleStyle: {

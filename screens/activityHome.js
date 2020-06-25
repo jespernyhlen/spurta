@@ -59,16 +59,8 @@ export default function activityHome({ navigation }) {
         }, [])
     );
 
-    // let text = 'Waiting..';
-    // if (errorMsg) {
-    //     text = errorMsg;
-    // } else if (activityInfo) {
-    //     text = activityInfo.speed.toFixed(2);
-    // }
-
     return (
         <View style={globalStyles.fullContainer}>
-            {/* <Text>{text} km / h</Text> */}
             <MapView
                 initialRegion={location}
                 showsCompass={true}
