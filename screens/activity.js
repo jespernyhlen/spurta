@@ -18,7 +18,7 @@ import { FlatButton } from '../shared/button';
 export default function Activity({ route, navigation }) {
     const [errorMsg, setErrorMsg] = useState(null);
     const [startTime, setStartTime] = useState(null);
-    const [distance, setDistance] = useState(1000);
+    const [distance, setDistance] = useState(0);
 
     const [activityInfo, setActivityInfo] = useState({
         speed: null,
@@ -101,9 +101,9 @@ export default function Activity({ route, navigation }) {
         }, [activityInfo])
     );
 
-    let activityTime = '--||--';
-    let activitySpeed = '--||--';
-    let activityAVGSpeed = '--||--';
+    let activityTime = null;
+    let activitySpeed = null;
+    let activityAVGSpeed = null;
 
     if (startTime && activityInfo.time) {
         let timeInfo = minToMinSec(
@@ -119,7 +119,7 @@ export default function Activity({ route, navigation }) {
         activitySpeed =
             speedInfo.minutes < 60
                 ? speedInfo.minutes + ':' + speedInfo.seconds
-                : '--||--';
+                : null;
     }
 
     if (distance > 1) {
@@ -130,17 +130,15 @@ export default function Activity({ route, navigation }) {
 
         activityAVGSpeed = AVGTempo.minutes + ':' + AVGTempo.seconds;
     }
-
+    console.log(startTime);
     const handlePress = () => {
-        let userID = 1;
-        let activityID = 1;
-
-        let name = 'userID';
+        let userID = firebase.auth().currentUser.uid;
+        // let userEmail = firebase.auth().currentUser.email;
 
         let activityData = {
-            day: '2020-04-31',
+            date: startTime,
             time: activityTime,
-            speed: activityAVGSpeed,
+            speed: activityAVGSpeed ? activityAVGSpeed : 0,
             distance: distance,
         };
 
@@ -178,7 +176,9 @@ export default function Activity({ route, navigation }) {
         <View style={globalStyles.fullContainer}>
             <View style={styles.container}>
                 <View style={styles.content}>
-                    <Text style={styles.time}>{activityTime}</Text>
+                    <Text style={styles.time}>
+                        {activityTime ? activityTime : '--||--'}
+                    </Text>
                     <Text style={styles.descText}>tid</Text>
                 </View>
                 <View style={styles.contentHighligt}>
@@ -197,11 +197,15 @@ export default function Activity({ route, navigation }) {
                 </View>
                 <View style={styles.contentRow}>
                     <View style={styles.content}>
-                        <Text style={styles.time}>{activitySpeed}</Text>
+                        <Text style={styles.time}>
+                            {activitySpeed ? activitySpeed : '--||--'}
+                        </Text>
                         <Text style={styles.descText}>aktuellt tempo</Text>
                     </View>
                     <View style={styles.content}>
-                        <Text style={styles.time}>{activityAVGSpeed}</Text>
+                        <Text style={styles.time}>
+                            {activityAVGSpeed ? activityAVGSpeed : '--||--'}
+                        </Text>
                         <Text style={styles.descText}>medel tempo</Text>
                     </View>
                 </View>
@@ -231,11 +235,11 @@ const styles = StyleSheet.create({
         fontSize: 54,
         fontWeight: '700',
         textAlign: 'center',
-        color: '#000',
+        color: '#fff',
     },
     contentHighligt: {
         paddingVertical: 40,
-        backgroundColor: '#eee',
+        backgroundColor: '#333',
     },
     contentRow: {
         flexDirection: 'row',
@@ -252,7 +256,7 @@ const styles = StyleSheet.create({
         color: '#222',
     },
     descTextHighlight: {
-        color: '#111',
+        color: '#eee',
         paddingBottom: 6,
     },
 });

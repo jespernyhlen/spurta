@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import AuthContext from '../AuthContext';
 import {
     StyleSheet,
     Text,
@@ -13,163 +14,141 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
-
 import * as firebase from 'firebase';
 import { FlatButton, HomeButton } from '../shared/button';
 
-export default class Signup extends Component {
-    constructor() {
-        super();
-        this.state = {
-            displayName: '',
-            email: '',
-            password: '',
-            isLoading: false,
-        };
-    }
+export default function Signup({ navigation }) {
+    const [errorMessage, setErrorMessage] = useState('');
+    const [displayName, setDisplayName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    updateInputVal = (val, prop) => {
-        const state = this.state;
-        state[prop] = val;
-        this.setState(state);
-    };
+    const { signUp } = React.useContext(AuthContext);
 
-    registerUser = () => {
-        if (this.state.email === '' && this.state.password === '') {
+    let registerUser = () => {
+        if (email === '' && password === '') {
             Alert.alert('Enter details to signup!');
         } else {
-            this.setState({
-                isLoading: true,
-            });
+            setIsLoading(true);
+
             firebase
                 .auth()
-                .createUserWithEmailAndPassword(
-                    this.state.email,
-                    this.state.password
-                )
+                .createUserWithEmailAndPassword(email, password)
                 .then((res) => {
                     res.user.updateProfile({
-                        displayName: this.state.displayName,
+                        displayName: displayName,
                     });
                     console.log('User registered successfully!');
-                    this.setState({
-                        isLoading: false,
-                        displayName: '',
-                        email: '',
-                        password: '',
-                    });
-                    this.props.navigation.navigate('Login');
+                    setDisplayName('');
+                    setEmail('');
+                    setPassword('');
+
+                    signUp({ email, password });
+                    // this.props.navigation.navigate('Login');
                 })
-                .catch((error) =>
-                    this.setState({ errorMessage: error.message })
-                );
+                .catch((error) => {
+                    console.log(error.message);
+                    Alert.alert(error.message);
+                });
+            setIsLoading(false);
         }
     };
 
-    render() {
-        if (this.state.isLoading) {
-            return (
-                <View style={styles.preloader}>
-                    <ActivityIndicator size='large' color='#9E9E9E' />
-                </View>
-            );
-        }
+    if (isLoading) {
         return (
-            <ImageBackground
-                source={{
-                    uri:
-                        'https://images.pexels.com/photos/2284163/pexels-photo-2284163.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-                }}
-                style={styles.container}
-                blurRadius={1.5}
-            >
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <LinearGradient
-                        colors={['rgba(36,33,52,0.3)', 'rgba(10,10,30,0.9)']}
-                        start={[-0.1, 0.1]}
-                        style={{ flex: 1 }}
-                        style={styles.gradientWrapper}
-                    >
-                        <View style={styles.container}>
-                            <View style={styles.inputItem}>
-                                <MaterialIcons
-                                    name='person'
-                                    size={18}
-                                    color='#aaa'
-                                    style={styles.inputIcon}
-                                />
-                                <TextInput
-                                    style={styles.inputStyle}
-                                    placeholder='Namn'
-                                    value={this.state.displayName}
-                                    onChangeText={(val) =>
-                                        this.updateInputVal(val, 'displayName')
-                                    }
-                                />
-                            </View>
-                            <View style={styles.inputItem}>
-                                <MaterialIcons
-                                    name='email'
-                                    size={18}
-                                    color='#aaa'
-                                    style={styles.inputIcon}
-                                />
-                                <TextInput
-                                    style={styles.inputStyle}
-                                    placeholder='E-post'
-                                    value={this.state.email}
-                                    onChangeText={(val) =>
-                                        this.updateInputVal(val, 'email')
-                                    }
-                                />
-                            </View>
-                            <View style={styles.inputItem}>
-                                <MaterialIcons
-                                    name='lock'
-                                    size={18}
-                                    color='#aaa'
-                                    style={styles.inputIcon}
-                                />
-                                <TextInput
-                                    style={styles.inputStyle}
-                                    placeholder='Lösenord'
-                                    value={this.state.password}
-                                    onChangeText={(val) =>
-                                        this.updateInputVal(val, 'password')
-                                    }
-                                    maxLength={15}
-                                    secureTextEntry={true}
-                                />
-                            </View>
-
-                            <HomeButton
-                                text='Registrera dig'
-                                color='green'
-                                onPress={() => this.registerUser()}
-                            />
-
-                            <View style={styles.loginTextContainer}>
-                                <Text style={styles.loginText}>
-                                    Har du redan en användare?
-                                </Text>
-                                <Text
-                                    style={{
-                                        ...styles.loginText,
-                                        ...styles.loginLink,
-                                    }}
-                                    onPress={() =>
-                                        this.props.navigation.navigate('Login')
-                                    }
-                                >
-                                    Logga in
-                                </Text>
-                            </View>
-                        </View>
-                    </LinearGradient>
-                </TouchableWithoutFeedback>
-            </ImageBackground>
+            <View style={styles.preloader}>
+                <ActivityIndicator size='large' color='#9E9E9E' />
+            </View>
         );
     }
+    return (
+        <ImageBackground
+            source={{
+                uri:
+                    'https://images.pexels.com/photos/2284163/pexels-photo-2284163.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+            }}
+            style={styles.container}
+            blurRadius={1.5}
+        >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <LinearGradient
+                    colors={['rgba(36,33,52,0.3)', 'rgba(10,10,30,0.9)']}
+                    start={[-0.1, 0.1]}
+                    style={{ flex: 1 }}
+                    style={styles.gradientWrapper}
+                >
+                    <View style={styles.container}>
+                        <View style={styles.inputItem}>
+                            <MaterialIcons
+                                name='person'
+                                size={18}
+                                color='#aaa'
+                                style={styles.inputIcon}
+                            />
+                            <TextInput
+                                style={styles.inputStyle}
+                                placeholder='Namn'
+                                value={displayName}
+                                onChangeText={(val) => setDisplayName(val)}
+                            />
+                        </View>
+                        <View style={styles.inputItem}>
+                            <MaterialIcons
+                                name='email'
+                                size={18}
+                                color='#aaa'
+                                style={styles.inputIcon}
+                            />
+                            <TextInput
+                                style={styles.inputStyle}
+                                placeholder='E-post'
+                                value={email}
+                                onChangeText={(val) => setEmail(val)}
+                            />
+                        </View>
+                        <View style={styles.inputItem}>
+                            <MaterialIcons
+                                name='lock'
+                                size={18}
+                                color='#aaa'
+                                style={styles.inputIcon}
+                            />
+                            <TextInput
+                                style={styles.inputStyle}
+                                placeholder='Lösenord'
+                                value={password}
+                                onChangeText={(val) => setPassword(val)}
+                                maxLength={15}
+                                secureTextEntry={true}
+                            />
+                        </View>
+
+                        <HomeButton
+                            text='Registrera dig'
+                            color='green'
+                            onPress={() => registerUser()}
+                        />
+
+                        <View style={styles.loginTextContainer}>
+                            <Text style={styles.loginText}>
+                                Har du redan en användare?
+                            </Text>
+                            <Text
+                                style={{
+                                    ...styles.loginText,
+                                    ...styles.loginLink,
+                                }}
+                                onPress={() => navigation.navigate('Login')}
+                            >
+                                Logga in
+                            </Text>
+                        </View>
+                    </View>
+                </LinearGradient>
+            </TouchableWithoutFeedback>
+        </ImageBackground>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -195,6 +174,7 @@ const styles = StyleSheet.create({
         paddingLeft: 12,
     },
     inputStyle: {
+        width: '100%',
         padding: 10,
         color: '#fff',
     },

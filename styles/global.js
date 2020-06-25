@@ -3,12 +3,13 @@ import { StyleSheet } from 'react-native';
 export const globalStyles = StyleSheet.create({
     fullContainer: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#eee',
+        paddingBottom: 5,
     },
     container: {
         flex: 1,
         padding: 10,
-        backgroundColor: '#fff',
+        backgroundColor: '#eee',
     },
     titleText: {
         fontFamily: 'nunito-bold',

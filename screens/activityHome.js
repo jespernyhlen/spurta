@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import AuthContext from '../AuthContext';
 import {
     StyleSheet,
     View,
@@ -13,9 +14,11 @@ import { useFocusEffect } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import * as TaskManager from 'expo-task-manager';
+import * as firebase from 'firebase';
+
 import MapView from 'react-native-maps';
 import { globalStyles } from '../styles/global';
-import { FlatButton } from '../shared/button';
+import { HomeButton, FlatButton } from '../shared/button';
 
 export default function activityHome({ navigation }) {
     const [location, setLocation] = useState(null);

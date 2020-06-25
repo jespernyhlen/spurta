@@ -4,6 +4,7 @@ import Header from '../shared/header';
 import Home from '../components/Home';
 import Login from '../components/Login';
 import Signup from '../components/Signup';
+import activityNavigator from './activityStack';
 
 const Stack = createStackNavigator();
 
@@ -38,6 +39,15 @@ export default function loginNavigator({ navigation }) {
                 options={{
                     headerTitle: () => (
                         <Header navigation={navigation} title='Registrera' />
+                    ),
+                }}
+            />
+            <Stack.Screen
+                name='ActivityHome'
+                component={activityNavigator}
+                options={{
+                    headerTitle: () => (
+                        <Header navigation={navigation} title='' />
                     ),
                 }}
             />

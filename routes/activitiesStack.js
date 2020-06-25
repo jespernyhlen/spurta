@@ -26,7 +26,7 @@ export default function activitiesNavigator({ navigation }) {
 
 const screenOptions = {
     headerStyle: {
-        backgroundColor: '#111',
+        backgroundColor: '#222',
     },
     headerTintColor: '#fff',
     headerTitleStyle: {

@@ -33,7 +33,7 @@ export default class Home extends Component {
                     start={[0.1, 0.3]}
                     style={styles.inputContainer}
                 >
-                    <Text style={styles.headerMainText}>Spurta</Text>
+                    <Text style={styles.headerMainText}>springa</Text>
                     <Text style={styles.headerText}>
                         Gå med för att enkelt spåra din utveckling som löpare.
                     </Text>

@@ -11,50 +11,79 @@ import signupNavigator from './signupStack';
 
 const Drawer = createDrawerNavigator();
 
-export default function drawerNavigator() {
-    return (
+export default function drawerNavigator({ isLoggedIn }) {
+    console.log(isLoggedIn);
+    return isLoggedIn ? (
         <NavigationContainer>
             <Drawer.Navigator
-                initialRouteName='Login'
+                initialRouteName='Löpning'
                 drawerStyle={{
-                    backgroundColor: '#29303A',
+                    backgroundColor: '#222',
                 }}
-                drawerContentOptions={{
-                    activeTintColor: '#eee',
-                    activeBackgroundColor: '#000',
-                    inactiveTintColor: '#ccc',
-                    itemStyle: {
-                        marginTop: 0,
-                        borderRadius: 0,
-                        paddingHorizontal: 15,
-                        paddingVertical: 5,
-                    },
-                    labelStyle: {
-                        letterSpacing: 1,
-                        fontSize: 18,
-                    },
-                    style: {
-                        marginHorizontal: -10,
-                    },
-                }}
+                drawerContentOptions={drawerContentOptions}
             >
+                <Drawer.Screen
+                    name='Löpning'
+                    component={activityNavigator}
+                    options={drawerIcon('directions-run')}
+                />
+                <Drawer.Screen
+                    name='Aktiviteter'
+                    component={activitiesNavigator}
+                    options={drawerIcon('trending-up')}
+                />
+            </Drawer.Navigator>
+        </NavigationContainer>
+    ) : (
+        <NavigationContainer>
+            <Drawer.Navigator initialRouteName='Login'>
                 <Drawer.Screen
                     name='Logga in'
                     component={loginNavigator}
                     options={{
-                        drawerIcon: () => (
-                            <MaterialIcons
-                                style={{ padding: 0, marginRight: -10 }}
-                                name='trending-up'
-                                size={20}
-                                color='white'
-                            />
-                        ),
                         gestureEnabled: false,
                         swipeEnabled: false,
                     }}
                 />
-                <Drawer.Screen
+            </Drawer.Navigator>
+        </NavigationContainer>
+    );
+}
+
+const drawerContentOptions = {
+    activeTintColor: '#eee',
+    activeBackgroundColor: '#000',
+    inactiveTintColor: '#ccc',
+    itemStyle: {
+        marginTop: 0,
+        borderRadius: 0,
+        paddingHorizontal: 15,
+        paddingVertical: 5,
+    },
+    labelStyle: {
+        letterSpacing: 1,
+        fontSize: 18,
+    },
+    style: {
+        marginHorizontal: -10,
+    },
+};
+
+const drawerIcon = (iconName) => {
+    return {
+        drawerIcon: () => (
+            <MaterialIcons
+                style={{ padding: 0, marginRight: -10 }}
+                name={iconName}
+                size={20}
+                color='white'
+            />
+        ),
+    };
+};
+
+{
+    /* <Drawer.Screen
                     name='Registrera'
                     component={signupNavigator}
                     options={{
@@ -67,36 +96,5 @@ export default function drawerNavigator() {
                             />
                         ),
                     }}
-                />
-                <Drawer.Screen
-                    name='Springtur'
-                    component={activityNavigator}
-                    options={{
-                        drawerIcon: () => (
-                            <MaterialIcons
-                                style={{ padding: 0, marginRight: -10 }}
-                                name='directions-run'
-                                size={20}
-                                color='white'
-                            />
-                        ),
-                    }}
-                />
-                <Drawer.Screen
-                    name='Aktiviteter'
-                    component={activitiesNavigator}
-                    options={{
-                        drawerIcon: () => (
-                            <MaterialIcons
-                                style={{ padding: 0, marginRight: -10 }}
-                                name='trending-up'
-                                size={20}
-                                color='white'
-                            />
-                        ),
-                    }}
-                />
-            </Drawer.Navigator>
-        </NavigationContainer>
-    );
+                /> */
 }

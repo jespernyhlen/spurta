@@ -17,7 +17,7 @@ export default function activityNavigator({ navigation }) {
                 component={ActivityHome}
                 options={{
                     headerTitle: () => (
-                        <Header navigation={navigation} title='Springtur' />
+                        <Header navigation={navigation} title='Löpning' />
                     ),
                 }}
             />
@@ -32,7 +32,7 @@ export default function activityNavigator({ navigation }) {
 
 const screenOptions = {
     headerStyle: {
-        backgroundColor: '#29303A',
+        backgroundColor: '#222',
     },
     headerTintColor: '#fff',
     headerTitleStyle: {
