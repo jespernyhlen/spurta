@@ -1,8 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Header from '../shared/header';
-import Main from '../components/Logout';
-import { HomeButton, HomeButtonOpacity } from '../shared/button';
+import Main from '../screens/Logout';
 
 const Stack = createStackNavigator();
 

@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
         elevation: 2,
         backgroundColor: '#fff',
         marginVertical: 5,
+        paddingVertical: 5,
         borderRadius: 3,
         marginHorizontal: 5,
     },
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginHorizontal: 10,
-        paddingVertical: 15,
+        paddingVertical: 10,
         borderBottomWidth: 1,
         borderTopRightRadius: 3,
         borderTopLeftRadius: 3,
@@ -113,6 +114,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginTop: -4,
         color: '#000',
+        fontWeight: 'bold',
     },
     dateText: {
         color: '#222',
@@ -121,7 +123,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingHorizontal: 10,
-        paddingVertical: 10,
+        paddingVertical: 5,
     },
     item: {
         flexDirection: 'column',

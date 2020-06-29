@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import AuthContext from '../AuthContext';
+import UserContext from '../UserContext';
 import {
     StyleSheet,
     View,
+    Alert,
     Text,
     FlatList,
     TouchableOpacity,
@@ -22,7 +23,6 @@ import { HomeButton, FlatButton } from '../shared/button';
 
 export default function activityHome({ navigation }) {
     const [location, setLocation] = useState(null);
-    const [errorMsg, setErrorMsg] = useState(null);
 
     let _getLocationAsync = async () => {
         let position = await Location.getCurrentPositionAsync({
@@ -35,7 +35,6 @@ export default function activityHome({ navigation }) {
             latitudeDelta: 0.045,
             longitudeDelta: 0.045,
         };
-        console.log(position.coords);
 
         setLocation(currentLocation);
     };
@@ -48,7 +47,7 @@ export default function activityHome({ navigation }) {
                     Permissions.LOCATION
                 );
                 if (status !== 'granted') {
-                    setErrorMsg('Permission to access location was denied');
+                    Alert.alert('Permission to access location was denied');
                 } else {
                     interval = setInterval(() => {
                         _getLocationAsync();

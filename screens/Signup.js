@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import AuthContext from '../AuthContext';
 import {
     StyleSheet,
     Text,
@@ -24,8 +23,6 @@ export default function Signup({ navigation }) {
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const { signUp } = React.useContext(AuthContext);
-
     let registerUser = () => {
         if (email === '' && password === '') {
             Alert.alert('Enter details to signup!');
@@ -43,9 +40,6 @@ export default function Signup({ navigation }) {
                     setDisplayName('');
                     setEmail('');
                     setPassword('');
-
-                    signUp({ email, password });
-                    // this.props.navigation.navigate('Login');
                 })
                 .catch((error) => {
                     console.log(error.message);

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import AuthContext from '../AuthContext';
 import {
     StyleSheet,
     Text,
@@ -24,11 +23,9 @@ export default function Login({ navigation }) {
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const { signIn } = React.useContext(AuthContext);
-
     let userLogin = (email, password) => {
         if (email === '' && password === '') {
-            Alert.alert('Enter details to signin!');
+            Alert.alert('Enter details to login!');
         } else {
             setIsLoading(true);
 
@@ -36,12 +33,11 @@ export default function Login({ navigation }) {
                 .auth()
                 .signInWithEmailAndPassword(email, password)
                 .then((res) => {
-                    console.log(res);
+                    // console.log(res);
                     console.log('User logged-in successfully!');
 
                     setEmail('');
                     setPassword('');
-                    signIn({ email, password });
                 })
                 .catch((error) => {
                     console.log(error.message);

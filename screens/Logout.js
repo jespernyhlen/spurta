@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import AuthContext from '../AuthContext';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import UserContext from '../UserContext';
+import { Alert, StyleSheet, View, Text, Button } from 'react-native';
 import * as firebase from 'firebase';
 import { HomeButton, HomeButtonOpacity } from '../shared/button';
 
@@ -8,14 +8,14 @@ export default function Logout({ navigation }) {
     const [userID, setUserID] = useState('');
     const [displayName, setDisplayName] = useState('');
 
-    const { signOut } = React.useContext(AuthContext);
+    const { userInfo } = React.useContext(UserContext);
 
     let userSignOut = () => {
         firebase
             .auth()
             .signOut()
             .then(() => {
-                signOut();
+                console.log('Signing out');
             })
             .catch((error) => {
                 console.log(error.message);
@@ -24,6 +24,7 @@ export default function Logout({ navigation }) {
     };
 
     useEffect(() => {
+        console.log(userInfo);
         setUserID(firebase.auth().currentUser.uid);
         setDisplayName(firebase.auth().currentUser.displayName);
     }, []);

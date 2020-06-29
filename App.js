@@ -1,9 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import AuthContext from './AuthContext';
+import { Dimensions } from 'react-native';
+import UserContext from './UserContext';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
+import {
+    NavigationContainer,
+    DefaultTheme as NavigationDefaultTheme,
+    DarkTheme as NavigationDarkTheme,
+} from '@react-navigation/native';
+import {
+    Provider as PaperProvider,
+    DefaultTheme as PaperDefaultTheme,
+    DarkTheme as PaperDarkTheme,
+} from 'react-native-paper';
+
 import drawerNavigator from './routes/drawer';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+// import drawerNavigator from './routes/drawer2';
 import * as firebase from 'firebase';
+import { MaterialIcons, Foundation } from '@expo/vector-icons';
+import { DrawerContent } from './screens/DrawerContent';
+
+import activitiesNavigator from './routes/activitiesStack';
+import activityNavigator from './routes/activityStack';
+import loginNavigator from './routes/loginStack';
+import logoutNavigator from './routes/logoutStack';
 
 // Your web app's Firebase configuration
 var firebaseConfig = {
@@ -20,6 +41,7 @@ var firebaseConfig = {
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
+const Drawer = createDrawerNavigator();
 
 const getFonts = () =>
     Font.loadAsync({
@@ -28,44 +50,43 @@ const getFonts = () =>
         'nunito-extrabold': require('./assets/fonts/Nunito-ExtraBold.ttf'),
     });
 
+const initialUserState = {
+    username: '',
+    email: '',
+    loggedIn: false,
+};
+
 export default function App() {
     const [fontLoaded, setFontLoaded] = useState(false);
-    const [state, dispatch] = React.useReducer(
-        (prevState, action) => {
-            switch (action.type) {
-                case 'RESTORE_TOKEN':
-                    return {
-                        ...prevState,
-                        userToken: action.token,
-                        isLoading: false,
-                    };
-                case 'SIGN_IN':
-                    return {
-                        ...prevState,
-                        isSignout: false,
-                        userToken: action.token,
-                    };
-                case 'SIGN_OUT':
-                    return {
-                        ...prevState,
-                        isSignout: true,
-                        userToken: null,
-                    };
-                case 'USER_ID':
-                    return {
-                        ...prevState,
-                    };
-            }
+    const [user, setUser] = useState(initialUserState);
+
+    const CustomDefaultTheme = {
+        ...NavigationDefaultTheme,
+        ...PaperDefaultTheme,
+        colors: {
+            ...NavigationDefaultTheme.colors,
+            ...PaperDefaultTheme.colors,
+            background: '#ffffff',
+            text: '#fff',
         },
-        {
-            isLoading: true,
-            isSignout: false,
-            userToken: null,
-        }
-    );
+    };
+
+    const theme = CustomDefaultTheme;
 
     useEffect(() => {
         // Fetch the token from storage then navigate to our appropriate place
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                setUser({
+                    username: user.displayName,
+                    email: user.email,
+                    loggedIn: true,
+                });
+            } else {
+                setUser(initialUserState);
+            }
+        });
+
         const bootstrapAsync = async () => {
             let userToken;
 
@@ -80,48 +101,58 @@ export default function App() {
 
             // This will switch to the App screen or Auth screen and this loading
             // screen will be unmounted and thrown away.
-            dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+            // dispatch({ type: 'RESTORE_TOKEN', token: userToken });
         };
 
         bootstrapAsync();
     }, []);
 
-    const authContext = React.useMemo(
-        () => ({
-            signIn: async (data) => {
-                // In a production app, we need to send some data (usually username, password) to server and get a token
-                // We will also need to handle errors if sign in failed
-                // After getting token, we need to persist the token using `AsyncStorage`
-                // In the example, we'll use a dummy token
-                console.log(data);
-
-                dispatch({
-                    type: 'SIGN_IN',
-                    token: 'dummy-auth-token',
-                });
-                // navigation.navigate('ActivityHome');
-            },
-            signOut: () => dispatch({ type: 'SIGN_OUT' }),
-            signUp: async (data) => {
-                // In a production app, we need to send user data to server and get a token
-                // We will also need to handle errors if sign up failed
-                // After getting token, we need to persist the token using `AsyncStorage`
-                // In the example, we'll use a dummy token
-
-                dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
-            },
-        }),
-        []
-    );
-
     if (fontLoaded) {
-        // let userLoggedIn = state.userToken == null ? true : false;
-        let userLoggedIn = state.userToken == null ? false : true;
-
+        const screenWidth = Dimensions.get('screen').width;
         return (
-            <AuthContext.Provider value={authContext}>
-                {drawerNavigator({ isLoggedIn: userLoggedIn })}
-            </AuthContext.Provider>
+            <UserContext.Provider value={{ userInfo: user }}>
+                {user.loggedIn ? (
+                    <NavigationContainer theme={theme}>
+                        <Drawer.Navigator
+                            initialRouteName='Löpning'
+                            drawerStyle={{
+                                backgroundColor: '#181818',
+                                width: screenWidth - screenWidth / 10,
+                            }}
+                            // drawerContentOptions={drawerContentOptions}
+                            drawerContent={(props) => (
+                                <DrawerContent {...props} />
+                            )}
+                        >
+                            <Drawer.Screen
+                                name='ActivityHome'
+                                component={activityNavigator}
+                            />
+                            <Drawer.Screen
+                                name='Activities'
+                                component={activitiesNavigator}
+                            />
+                            <Drawer.Screen
+                                name='Logout'
+                                component={logoutNavigator}
+                            />
+                        </Drawer.Navigator>
+                    </NavigationContainer>
+                ) : (
+                    <NavigationContainer>
+                        <Drawer.Navigator initialRouteName='Login'>
+                            <Drawer.Screen
+                                name='Logga in'
+                                component={loginNavigator}
+                                options={{
+                                    gestureEnabled: false,
+                                    swipeEnabled: false,
+                                }}
+                            />
+                        </Drawer.Navigator>
+                    </NavigationContainer>
+                )}
+            </UserContext.Provider>
         );
     } else {
         return (
