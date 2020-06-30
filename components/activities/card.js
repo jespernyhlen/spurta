@@ -89,8 +89,8 @@ export default function Card({ activity }) {
 const styles = StyleSheet.create({
     card: {
         elevation: 2,
-        backgroundColor: '#fff',
-        marginVertical: 5,
+        backgroundColor: '#282828',
+        marginVertical: 2.5,
         paddingVertical: 5,
         borderRadius: 3,
         marginHorizontal: 5,
@@ -107,17 +107,16 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderTopRightRadius: 3,
         borderTopLeftRadius: 3,
-        borderColor: '#eee',
-        backgroundColor: '#fff',
+        borderColor: '#212121',
     },
     dateHighlight: {
         fontSize: 16,
         marginTop: -4,
-        color: '#000',
+        color: '#fff',
         fontWeight: 'bold',
     },
     dateText: {
-        color: '#222',
+        color: '#eee',
     },
     activityValues: {
         flexDirection: 'row',
@@ -131,10 +130,11 @@ const styles = StyleSheet.create({
     },
     itemLabel: {
         fontSize: 12,
-        color: '#888',
+        color: '#bbb',
     },
     itemValue: {
         fontSize: 16,
         fontWeight: '400',
+        color: '#eee',
     },
 });

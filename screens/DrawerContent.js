@@ -27,8 +27,7 @@ export function DrawerContent(props) {
                         <View style={{ flexDirection: 'row' }}>
                             <Avatar.Image
                                 source={{
-                                    uri:
-                                        'https://api.adorable.io/avatars/50/abott@adorable.png',
+                                    uri: userInfo.photoURL,
                                 }}
                                 size={50}
                             />
@@ -117,13 +116,12 @@ const iconLabel = {
 const styles = StyleSheet.create({
     drawerContent: {
         flex: 1,
-        marginTop: -30,
+        marginTop: -3,
     },
     userInfoSection: {
         paddingLeft: 20,
-        paddingBottom: 25,
-        paddingTop: 45,
-        backgroundColor: '#282828',
+        paddingVertical: 25,
+        backgroundColor: '#111',
     },
     title: {
         fontSize: 22,
@@ -152,7 +150,7 @@ const styles = StyleSheet.create({
         marginRight: 3,
     },
     drawerSection: {
-        marginTop: 15,
+        marginTop: 10,
     },
     drawerItem: {
         color: '#eee',

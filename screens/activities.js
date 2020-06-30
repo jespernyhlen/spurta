@@ -42,7 +42,7 @@ export default function Activities() {
         return (
             <View
                 style={globalStyles.fullContainer}
-                style={{ marginVertical: 5 }}
+                style={{ paddingVertical: 5, backgroundColor: '#121212' }}
             >
                 <FlatList
                     data={activityKeys}

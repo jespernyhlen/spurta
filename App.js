@@ -27,14 +27,23 @@ import loginNavigator from './routes/loginStack';
 import logoutNavigator from './routes/logoutStack';
 
 // Your web app's Firebase configuration
+// var firebaseConfig = {
+//     apiKey: 'example',
+//     authDomain: 'exampe',
+//     databaseURL: 'example',
+//     projectId: 'example',
+//     storageBucket: 'example',
+//     messagingSenderId: 'example',
+//     appId: 'example',
+// };
 var firebaseConfig = {
-    apiKey: 'example',
-    authDomain: 'exampe',
-    databaseURL: 'example',
-    projectId: 'example',
-    storageBucket: 'example',
-    messagingSenderId: 'example',
-    appId: 'example',
+    apiKey: 'AIzaSyBI9GM35y1lVMz8S7CLfmzbXpilUOIHg_I',
+    authDomain: 'spurta-0280.firebaseapp.com',
+    databaseURL: 'https://spurta-0280.firebaseio.com',
+    projectId: 'spurta-0280',
+    storageBucket: 'spurta-0280.appspot.com',
+    messagingSenderId: '27895407077',
+    appId: '1:27895407077:web:0ef5d9d59cdd8784554f0c',
 };
 
 // Initialize Firebase
@@ -80,6 +89,7 @@ export default function App() {
                 setUser({
                     username: user.displayName,
                     email: user.email,
+                    photoURL: user.photoURL,
                     loggedIn: true,
                 });
             } else {

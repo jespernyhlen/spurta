@@ -15,9 +15,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as firebase from 'firebase';
 import { FlatButton, HomeButton } from '../shared/button';
+import { MD5 } from '../utils/utils';
 
 export default function Signup({ navigation }) {
-    const [errorMessage, setErrorMessage] = useState('');
     const [displayName, setDisplayName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -35,6 +35,10 @@ export default function Signup({ navigation }) {
                 .then((res) => {
                     res.user.updateProfile({
                         displayName: displayName,
+                        photoURL:
+                            'https://www.gravatar.com/avatar/' +
+                            MD5(email) +
+                            '?s=200',
                     });
                     console.log('User registered successfully!');
                     setDisplayName('');

@@ -18,7 +18,6 @@ import { HomeButton, HomeButtonOpacity } from '../shared/button';
 
 import { AsyncStorage } from 'react-native';
 export default function Login({ navigation }) {
-    const [errorMessage, setErrorMessage] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +32,6 @@ export default function Login({ navigation }) {
                 .auth()
                 .signInWithEmailAndPassword(email, password)
                 .then((res) => {
-                    // console.log(res);
                     console.log('User logged-in successfully!');
 
                     setEmail('');
